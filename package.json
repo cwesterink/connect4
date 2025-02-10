@@ -1,0 +1,24 @@
+{
+  "name": "hw3-connect4",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon --loader @esbuild-kit/esm-loader -r  src/client.ts",
+    "start": "ts-node --esm src/client.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "description": "",
+  "devDependencies": {
+    "@esbuild-kit/esm-loader": "^2.6.5",
+    "nodemon": "^3.1.9",
+    "typescript": "^5.7.3"
+  },
+  "dependencies": {
+    "cli": "^1.0.1",
+    "ts-node": "^10.9.2"
+  }
+}
