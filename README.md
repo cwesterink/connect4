@@ -2,6 +2,25 @@
 
 This project implements a Connect 4 game runner, allowing two players to take turns dropping tokens into a 7x6 grid until one player wins or the game results in a draw.
 
+## Prerequisites
+Make sure you have the following installed on your machine:
+- [Node.js](https://nodejs.org/) (LTS recommended)
+- [npm](https://www.npmjs.com/) (comes with Node.js)
+
+## Installation
+
+1. **Clone the repository**
+   ```sh
+   git clone https://github.com/your-username/your-repo.git
+
+2. **Install Dependencies**
+   ```sh
+   npm install
+   
+3. **Executing Client**
+   ```sh
+   ts-node <path-to-your-client-file.ts>
+   
 ## Usage
 
 ### Importing the Game
