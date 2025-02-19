@@ -1,9 +1,24 @@
 /**
  * Represents a single cell in the Connect4 grid.
  *
- * A cell can either be occupied by a player (`Player.One` or `Player.Two`) or be empty (`null`).
+ * A cell can either be occupied by a player (`PlayerOne` or `PlayerTwo`) or be empty (`Empty`).
  */
-export type Cell = Player | null;
+export enum Cell {
+    /**
+     * Represents Cell occupied by player 1.
+     */
+    PlayerOne= "X",
+
+    /**
+     * Represents Cell occupied by player 2.
+     */
+    PlayerTwo =  "O",
+
+    /**
+     * Represents unoccupied/empty Cell
+     */
+    Empty = " "
+}
 
 /**
  * Represents the Connect 4 game grid.

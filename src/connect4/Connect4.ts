@@ -25,22 +25,21 @@ export class Connect4 implements Connect4Game {
     /**
      * Drops in token representing one of the two Players into the lowest available spot in the
      * provided column of the connect4 game grid. The game controller has a notion of the
-     * next Player's turn however the next player can be optionally overridden.
-     * If an error is thrown the game state remains the same.
+     * next Player's turn. If an error is thrown the game state remains the same.
      *
      * @param {number} columnIdx - The column index (0 to NUM_COLUMNS - 1) where the player
      * wants to drop a piece.
-     * @param {Player} player - (Optionally) The player making the move (Player.One or Player.Two).
      *
      * @throws {Connect4Error} If the game is over {ErrorType == GAME_OVER}
      * @throws {Connect4Error} If the column is full {ErrorType == COLUMN_FULL}
      */
-    public playColumn(columnIdx: number, player?: Player): void {
+    public playColumn(columnIdx: number): void {
         this.validatePlay(columnIdx);
         const rowIdx = this.nextRow[columnIdx];
 
-        const playing = player ?? this.playerTurn;
-        this.currentGrid[rowIdx][columnIdx] = playing;
+        const playing = this.playerTurn;
+        const cellValue = playing == Player.One ? Cell.PlayerOne : Cell.PlayerTwo;
+        this.currentGrid[rowIdx][columnIdx] = cellValue;
 
         this.nextRow[columnIdx]--;
         this.playerTurn = playing === Player.One ? Player.Two : Player.One;
@@ -51,6 +50,21 @@ export class Connect4 implements Connect4Game {
         } else if (this.boardFull()) {
             this.gameStatus = GameStatus.Draw;
         }
+    }
+
+    /**
+     * Returns a set of valid column indices where a player can drop a token. A column is considered
+     * valid if it is not completely filled with tokens.
+     *
+     * @returns {Set<number>} A set containing the indices of columns (0 to NUM_COLUMNS - 1) that
+     * are not full and can accept a new token.
+     */
+    public validColumns(): Set<number> {
+        const columns = this.nextRow
+            .filter((rowIdx: number) => rowIdx >= 0)
+            .map((_, columnIdx) => columnIdx);
+
+        return new Set(columns);
     }
 
     /**
@@ -100,7 +114,7 @@ export class Connect4 implements Connect4Game {
     private newGrid() {
         const grid = new Array(NUM_ROWS);
         for (let i = 0; i < NUM_ROWS; i++) {
-            grid[i] = new Array(NUM_COLUMNS).fill(null);
+            grid[i] = new Array(NUM_COLUMNS).fill(Cell.Empty);
         }
         return grid;
 
@@ -124,13 +138,13 @@ export class Connect4 implements Connect4Game {
         return this.nextRow.every(row => row < 0);
     }
 
-    private checkHorizontalWin(row: number, column: number, player: Player) {
+    private checkHorizontalWin(row: number, column: number, player: Cell) {
         const startCol = Math.max(0, column - 3);
         const endCol = Math.min(NUM_COLUMNS - 1, column + 4);
         return this.streak(this.currentGrid[row].slice(startCol, endCol), player) >= 4;
     }
 
-    private checkVerticalWin(rowIdx: number, columnIdx: number, player: Player) {
+    private checkVerticalWin(rowIdx: number, columnIdx: number, player: Cell) {
         const startRow = Math.max(0, rowIdx - 3);
         const endRow = Math.min(NUM_ROWS, rowIdx + 4);
 
@@ -138,7 +152,7 @@ export class Connect4 implements Connect4Game {
         return this.streak(col.slice(startRow, endRow), player) >= 4;
     }
 
-    private checkDescendingDiagonalWin(row: number, column: number, player: Player) {
+    private checkDescendingDiagonalWin(row: number, column: number, player: Cell) {
         const distance = Math.min(column, row, 3);
         const diagonalStartCol = column - distance;
         const diagonalStartRow = row - distance;
@@ -156,7 +170,7 @@ export class Connect4 implements Connect4Game {
         return this.streak(diagonals, player) >= 4;
     }
 
-    private checkAscendingDiagonalWin(row: number, column: number, player: Player) {
+    private checkAscendingDiagonalWin(row: number, column: number, player: Cell) {
         const distance = Math.min(column, NUM_ROWS - 1 - row, 3);
         const diagonalStartCol = column - distance;
         const diagonalStartRow = row + distance;
@@ -174,7 +188,7 @@ export class Connect4 implements Connect4Game {
         return this.streak(diagonals, player) >= 4;
     }
 
-    private streak(cells: Cell[], player: Player) {
+    private streak(cells: Cell[], player: Cell) {
         let maxStreak = 0;
         let currentStreak = 0;
         for (const cell of cells) {
@@ -194,9 +208,10 @@ export class Connect4 implements Connect4Game {
     }
 
     private checkWin(row: number, column: number, player: Player): boolean {
-        return this.checkHorizontalWin(row, column, player) ||
-            this.checkVerticalWin(row, column, player) ||
-            this.checkDescendingDiagonalWin(row, column, player) ||
-            this.checkAscendingDiagonalWin(row, column, player);
+        const cellPlayer = player == Player.One ? Cell.PlayerOne : Cell.PlayerTwo;
+        return this.checkHorizontalWin(row, column, cellPlayer) ||
+            this.checkVerticalWin(row, column, cellPlayer) ||
+            this.checkDescendingDiagonalWin(row, column, cellPlayer) ||
+            this.checkAscendingDiagonalWin(row, column, cellPlayer);
     }
 }

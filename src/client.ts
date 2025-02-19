@@ -25,7 +25,7 @@ class Connect4CliClient {
         console.log("\n 0  1  2  3  4  5  6 ");
         console.log("--------------------");
         board.forEach(row => {
-            console.log(row.map(cell => cell ? (cell === Player.One ? '🔴' : '🟡') : '⚪').join('  '));
+            console.log(row.join('  '));
         });
         console.log("--------------------\n");
     }

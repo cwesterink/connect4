@@ -4,17 +4,25 @@ export interface Connect4Game {
     /**
      * Drops in token representing one of the two Players into the lowest available spot in the
      * provided column of the connect4 game grid. The game controller has a notion of the
-     * next Player's turn however the next player can be optionally overridden.
-     * If an error is thrown the game state remains the same.
+     * next Player's turn. If an error is thrown the game state remains the same.
      *
      * @param {number} columnIdx - The column index (0 to NUM_COLUMNS - 1) where the player
      * wants to drop a piece.
-     * @param {Player} player - (Optionally) The player making the move (Player.One or Player.Two).
      *
      * @throws {Connect4Error} If the game is over {ErrorType == GAME_OVER}
      * @throws {Connect4Error} If the column is full {ErrorType == COLUMN_FULL}
      */
-    playColumn(columnIdx: number, player?: Player): void;
+    playColumn(columnIdx: number): void;
+
+
+    /**
+     * Returns a set of valid column indices where a player can drop a token. A column is considered
+     * valid if it is not completely filled with tokens.
+     *
+     * @returns {Set<number>} A set containing the indices of columns (0 to NUM_COLUMNS - 1) that
+     * are not full and can accept a new token.
+     */
+    validColumns(): Set<number>;
 
     /**
      * Returns the current the state of the connect4 grid, as a 2D array. The top left corner
