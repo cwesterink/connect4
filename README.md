@@ -11,7 +11,7 @@ Make sure you have the following installed on your machine:
 
 1. **Clone the repository**
    ```sh
-   git clone https://github.com/your-username/your-repo.git
+   git clone https://github.com/cwesterink/connect4.git
 
 2. **Install Dependencies**
    ```sh
@@ -19,7 +19,7 @@ Make sure you have the following installed on your machine:
    
 3. **Executing Client**
    ```sh
-   ts-node <path-to-your-client-file.ts>
+   npm run start
    
 ## Usage
 
@@ -40,8 +40,8 @@ Players take turns dropping tokens into columns:
 
 ```typescript
 try {
-    game.playColumn(Player.One, 3); // Player One drops a token in column 3
-    game.playColumn(Player.Two, 4); // Player Two drops a token in column 4
+    game.playColumn(3); // Player One drops a token in column 3
+    game.playColumn(4); // Player Two drops a token in column 4
 } catch (error) {
     console.error(error.message);
 }
@@ -86,7 +86,7 @@ Example:
 
 ```typescript
 try {
-    game.playColumn(Player.One, 7); // Invalid column index
+    game.playColumn(7); // Invalid column index
 } catch (error) {
     console.error(error.message);
 }
